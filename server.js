@@ -25,10 +25,10 @@ wss.on('connection', (ws) => {
 })
 
 app.use(cors())
-app.use(express.static('dist/angular/'));
+app.use(express.static('public/'));
 
 app.get('*', function(req,res) {
-  res.sendFile(path.resolve('dist/angular/index.html'));
+  res.sendFile(path.resolve('public/index.html'));
 });
 
 app.post('/research/start', rawParser,(req,res) => {

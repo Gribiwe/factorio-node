@@ -6,10 +6,8 @@
     "ng": "ng",
     "start": "node server.js",
     "serve": "nodemon --watch . server.js",
-    "server-build": "ng build && node server.js",
-    "build": "ng build",
-    "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "start-dev": "ng build && node server.js",
+    "build-dev": "ng build"
   },
   "private": true,
   "dependencies": {
