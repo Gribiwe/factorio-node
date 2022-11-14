@@ -1,0 +1,11 @@
+{
+  "name": "factorio-rcon-helper",
+  "version": "0.1.0",
+  "factorio_version": "1.1",
+  "title": "Factorio RCON helper",
+  "author": "Kumuki",
+  "contact": "",
+  "homepage": "",
+  "description": "Mod for the RCON to make data retrieving easier.",
+  "dependencies": []
+}

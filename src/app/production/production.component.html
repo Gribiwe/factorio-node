@@ -1,0 +1,113 @@
+<mat-form-field appearance="fill">
+  <mat-label>  {{ "time" | translate }}</mat-label>
+  <mat-select [(value)]="precisionIndex">
+    <mat-option *ngFor="let index of precisionIndexes" [value]="index">
+      {{ index.valueOf() | translate }}
+    </mat-option>
+  </mat-select>
+</mat-form-field>
+
+<div class="kumuki-row kumuki-lg">
+  <h1 class="kumuki-table first">{{"input" | translate}}</h1>
+  <h1 class="kumuki-table second">{{"output" | translate}}</h1>
+
+</div>
+
+<div class="kumuki-row">
+  <h2 class="kumuki-sm kumuki-table">{{"input" | translate}}</h2>
+  <div class="mat-elevation-z8 kumuki-table first">
+    <table mat-table [dataSource]="dataSourceIn" class="mat-elevation-z8" style="width: 100%" *ngIf="resourcesIn.length > 0">
+      <!-- Position Column -->
+      <ng-container matColumnDef="resource-color">
+        <th mat-header-cell *matHeaderCellDef >  </th>
+        <td style="padding-left: 0; padding-right: 0; width: 20px" mat-cell *matCellDef="let element">
+          <div class="{{element.resource}}-color-marker resource-color-marker"></div> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="resource">
+        <th mat-header-cell *matHeaderCellDef> Resource </th>
+        <td mat-cell style="width: 40px;" *matCellDef="let element" >
+          <div class="{{element.resource}} resource-image"></div> </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="amount">
+        <th mat-header-cell *matHeaderCellDef> Amount </th>
+        <td mat-cell *matCellDef="let element">
+          <div>
+            <div style="display: flex">
+              <span style="flex: 1">{{element.resource | translate}}</span>
+              <span >{{element.amount}}/{{"m" | translate}}</span>
+            </div>
+            <section class="example-section">
+              <mat-progress-bar
+                class="example-margin {{element.resource}}-color"
+                [mode]="mode"
+                [value]="element.percentages"
+                [bufferValue]="100">
+              </mat-progress-bar>
+            </section>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="demo-weight">
+        <th mat-header-cell *matHeaderCellDef> {{"input" | translate}} </th>
+        <td mat-cell style="width: 40px;" *matCellDef="let element"> {{element.amount}} </td>
+      </ng-container>
+
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+
+  <h2 class="kumuki-sm kumuki-table">{{"output" | translate}}</h2>
+  <div class="kumuki-table second">
+    <table mat-table [dataSource]="dataSourceOut" class="mat-elevation-z8 " style="width: 100%" *ngIf="resourcesOut.length > 0">
+      <h2>{{"output" | translate}}</h2>
+      <!-- Position Column -->
+      <ng-container matColumnDef="resource-color">
+        <th mat-header-cell *matHeaderCellDef>  </th>
+        <td mat-cell style="padding-left: 0; padding-right: 0; width: 20px" *matCellDef="let element">
+          <div class="{{element.resource}}-color-marker resource-color-marker"></div> </td>
+      </ng-container>
+
+      <ng-container matColumnDef="resource">
+        <th mat-header-cell *matHeaderCellDef> Resource </th>
+        <td mat-cell style="width: 40px;" *matCellDef="let element">
+          <div class="{{element.resource}} resource-image"></div> </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="amount" >
+        <th mat-header-cell *matHeaderCellDef> Name </th>
+        <td mat-cell *matCellDef="let element">
+          <div>
+            <div style="display: flex">
+              <span style="flex: 1">{{element.resource | translate}}</span>
+              <span>{{element.amount}}/{{"m" | translate}}</span>
+            </div>
+            <section class="example-section">
+              <mat-progress-bar
+                class="example-margin {{element.resource}}-color"
+                [mode]="mode"
+                [value]="element.percentages"
+                [bufferValue]="100">
+              </mat-progress-bar>
+            </section>
+          </div>
+        </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="demo-weight">
+        <th mat-header-cell *matHeaderCellDef>  {{"output" | translate}}  </th>
+        <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+      </ng-container>
+
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+
+</div>

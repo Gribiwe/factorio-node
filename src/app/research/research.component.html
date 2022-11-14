@@ -1,0 +1,110 @@
+<h1 style="margin-top: 0px!important;">{{ 'research-queue' | translate }}</h1>
+<div class="technology-list technology-queue" *ngIf="data">
+  <div *ngFor="let tech of data.queue; trackBy: tackTech; let i = index" class="technology-block tooltip-kumuki"
+       (click)="selectTechnology(technologiesMap[tech.alias].index)">
+    <div class="{{i === 0? 'researching': ''}} cont" [style.width.px]="data.progress">
+      <div class="{{tech.alias}}-research research-image"></div>
+      <div class="level-line">
+        <div class="level" *ngIf="tech.level !== 1">
+          <b>{{tech.level}}</b>
+        </div>
+      </div>
+      <div class="science-line">
+        <div *ngFor="let science of tech.scienceList" class="{{science}} science"></div>
+      </div>
+      <div class="remove-research-button" (click)="removeResearch(tech.alias)">
+        <span>×</span>
+      </div>
+    </div>
+    <div class="tooltiptext-kumuki">
+      <div class="tech-name">
+        <b>{{tech.alias | translate}}</b>
+      </div>
+      <div class="tech-details">
+        <div class="tech-description">Some description. some description. some description. some description. some
+          description. some description.
+        </div>
+        <div>
+          <div class="science-line">
+            <div *ngFor="let science of tech.scienceList" class="{{science}} science"></div>
+            <span>×</span><span>{{tech.researchUnitCount}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="height: 142px"></div>
+</div>
+
+<h1 style="margin-top: 10px" *ngIf="currentResearch">{{currentResearch.alias | translate}}</h1>
+<div class="selected-tech" *ngIf="currentResearch">
+  <div class="tech-selected">
+    <div class="technology-block
+       technology-{{currentResearch.researchStatus}}">
+      <div class="{{currentResearch.alias}}-research research-image"></div>
+      <div class="level-line">
+        <div class="level" *ngIf="currentResearch.level !== 1">
+          <b>{{currentResearch.level}}</b>
+        </div>
+      </div>
+      <div class="science-line" style="width: 100%!important;">
+        <div *ngFor="let science of currentResearch.scienceList" class="{{science}} science"></div>
+      </div>
+    </div>
+
+    <div class="tech-details">
+        <h2>{{"price" | translate}}</h2>
+        <div class="science-line">
+          <div *ngFor="let science of currentResearch.scienceList" class="{{science}} science"></div>
+          <div class="science-cost">
+            <span>×</span>
+            <span>{{currentResearch.researchUnitCount}}</span>
+          </div>
+        </div>
+      <div class="tech-description">Some description. some description. some description. some description. some
+        description. some description.
+      </div>
+    </div>
+  </div>
+
+  <div class="research-button-section">
+    <div (click)="startResearch()" class="research-button
+    research-button-{{currentResearch.researchStatus === 'cant-research' || currentResearch.researchStatus === 'researched' || queueMap[currentResearch.alias]? 'disabled': 'enabled'}}">
+      {{"start-research" | translate}}
+    </div>
+  </div>
+</div>
+
+<h1>{{ 'technologies-list' | translate }}</h1>
+<div class="technology-list technologies" *ngIf="data">
+  <div *ngFor="let tech of data.technologies; trackBy: tackTech; let i = index" (click)="selectTechnology(tech.index)"
+       class="technology-block tooltip-kumuki
+       technology-{{tech.researchStatus}}">
+    <div class="{{tech.alias}}-research research-image"></div>
+    <div class="level-line">
+      <div class="level" *ngIf="tech.level !== 1">
+        <b>{{tech.level}}</b>
+      </div>
+    </div>
+    <div class="science-line">
+      <div *ngFor="let science of tech.scienceList" class="{{science}} science"></div>
+    </div>
+
+    <div class="tooltiptext-kumuki">
+      <div class="tech-name">
+        <b>{{tech.alias | translate}}</b>
+      </div>
+      <div class="tech-details">
+        <div class="tech-description">Some description. some description. some description. some description. some
+          description. some description.
+        </div>
+        <div>
+          <div class="science-line">
+            <div *ngFor="let science of tech.scienceList" class="{{science}} science"></div>
+            <span style="position:relative;">×</span><span>{{tech.researchUnitCount}}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
