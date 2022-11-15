@@ -7,6 +7,7 @@ import {ProductionInfo} from "../entity/production-info";
 export class ProductionService {
 
   public data: ProductionInfo = new ProductionInfo();
+  private baseUrl = '/resource';
 
   constructor() {
   }
