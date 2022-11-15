@@ -24,31 +24,12 @@ wss.on('connection', (ws) => {
   });
 })
 
-var appOptions = {
-  dotfiles: 'ignore',
-  etag: false,
-  extensions: ['htm', 'html','css','js','ico','jpg','jpeg','png','svg'],
-  index: ['index.html'],
-  maxAge: '1m',
-  redirect: false
-}
-
 app.use(cors())
-app.use(express.static('user-inteface/public', appOptions));
+app.use(express.static('user-inteface/public/'));
 
-app.use('index/*', (req,res) => {
-  res.json({
-    at: new Date().toISOString(),
-    method: req.method,
-    hostname: req.hostname,
-    ip: req.ip,
-    query: req.query,
-    headers: req.headers,
-    cookies: req.cookies,
-    params: req.params
-  })
-.end()
-})
+app.get('*', function(req,res) {
+  res.sendFile(path.resolve('user-inteface/public/index.html'));
+});
 
 app.post('/research/start', rawParser,(req,res) => {
   let command = "/startResearch "+ JSON.stringify({technology: req.body});

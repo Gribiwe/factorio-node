@@ -10,9 +10,11 @@ if (loc.protocol === "https:") {
   new_uri = "ws:";
 }
 var host = loc.host
-
+console.log(host)
 var doubleDotPos = host.indexOf(":");
+console.log(doubleDotPos)
 new_uri += "//" + (doubleDotPos !== -1 ? host.substring(0, doubleDotPos): host) + ":7071";
+console.log(new_uri)
 const subject = webSocket(new_uri);
 
 @Injectable({
