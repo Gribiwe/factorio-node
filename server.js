@@ -66,13 +66,11 @@ app.post('/research/remove', rawParser,(req,res) => {
   res.send({message: "researching removed"});
 });
 
-app.get('/research/list', (req,res) => {
-
-  getTechnologies().then((res) => {
-    console.log("1")
-    console.log(res)
-    res.send(getTechnologies());
-  })
+app.get('/research/list', async (req, res) => {
+  console.log("1")
+  let technologies = await getTechnologies();
+  console.log(res)
+  res.send(technologies);
 });
 
 app.get('/resource/list', (req,res) => {
@@ -108,12 +106,13 @@ app.listen(port, () => {
       factorio.send("/getResourcesInfo");
     }, 250)
   }).on('response', async function (str) {
-    if (str) {
 
+    if (str) {
+      str = JSON.parse(str)
       if (str.researchesInfo) {
-        await dataDB.set("technologies", newData)
+        await dataDB.set("technologies", str.researchesInfo)
       } else if (str.resourcesStat) {
-        await dataDB.set("resources", newData)
+        await dataDB.set("resources", str.resourcesStat)
       }
     }
   }).on('error', function(err) {
