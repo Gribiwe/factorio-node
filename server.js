@@ -1,30 +1,28 @@
 const express = require('express');
 const app = express();
-const port = process.env.PORT || 80;
+const port = 80;
+const path = require('path');
 const Rcon = require("rcon");
+const WebSocket = require('ws');
 const bodyParser = require('body-parser')
 const cors = require('cors')
 
+const wss = new WebSocket.Server({ port: 7071 });
 const jsonParser = bodyParser.json()
 const rawParser = bodyParser.text({type: () => true})
 
-
+const clients = new Map();
 const options = {tcp: true, challenge: false};
 const factorio = new Rcon("5.83.173.187", 12350, "1337228", options);
 var connected = false;
 
+wss.on('connection', (ws) => {
+  clients.set(ws, {});
 
-const CyclicDb = require("cyclic-dynamodb")
-const db = CyclicDb("enchanting-rose-robeCyclicDB")
-
-const dataDB = db.collection("data")
-
-app.use(function (req, res, next) {
-  res.set('x-timestamp', Date.now())
-  res.set('x-powered-by', 'cyclic.sh')
-  console.log(`[${new Date().toISOString()}] ${req.ip} ${req.method} ${req.path}`);
-  next();
-});
+  ws.on("close", () => {
+    clients.delete(ws);
+  });
+})
 
 var appOptions = {
   dotfiles: 'ignore',
@@ -49,7 +47,7 @@ app.use('index/*', (req,res) => {
     cookies: req.cookies,
     params: req.params
   })
-    .end()
+.end()
 })
 
 app.post('/research/start', rawParser,(req,res) => {
@@ -66,33 +64,6 @@ app.post('/research/remove', rawParser,(req,res) => {
   res.send({message: "researching removed"});
 });
 
-app.get('/research/list', async (req, res) => {
-  console.log("1")
-  let technologies = await getTechnologies();
-  console.log(res)
-  res.send(technologies);
-});
-
-app.get('/resource/list', (req,res) => {
-  res.send(getResources());
-});
-
-async function setTechnologies(newData) {
-  await dataDB.set("technologies", newData)
-}
-
-async function setResources(newData) {
-  await dataDB.set("resources", newData)
-}
-
-async function getTechnologies() {
-  await dataDB.get("technologies")
-}
-
-async function getResources() {
-  await dataDB.get("resources")
-}
-
 app.listen(port, () => {
   console.log(`App launched on port ${port}`)
 
@@ -105,15 +76,11 @@ app.listen(port, () => {
     setInterval(()=> {
       factorio.send("/getResourcesInfo");
     }, 250)
-  }).on('response', async function (str) {
-
+  }).on('response', function(str) {
     if (str) {
-      str = JSON.parse(str)
-      if (str.researchesInfo) {
-        await dataDB.set("technologies", str.researchesInfo)
-      } else if (str.resourcesStat) {
-        await dataDB.set("resources", str.resourcesStat)
-      }
+      [...clients.keys()].forEach((client) => {
+        client.send(str);
+      });
     }
   }).on('error', function(err) {
     console.log("Factorio error: " + err);

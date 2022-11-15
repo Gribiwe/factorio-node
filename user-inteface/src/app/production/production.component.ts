@@ -149,7 +149,6 @@ export class ProductionComponent implements OnInit, OnDestroy {
 
   makePercentage(dataRaw: ResourceInfo[]): ResourceDataPercentage[] {
     let result: ResourceDataPercentage[] = [];
-console.log("a")
     dataRaw = dataRaw.sort((a, b) => Number(a.amount) > Number(b.amount) ? -1 : 1);
     let maxAmount = Number(dataRaw[0].amount);
     dataRaw.forEach(resource => result.push(new ResourceDataPercentage(resource.resource, resource.amount, Number(resource.amount) / maxAmount * 100)))
