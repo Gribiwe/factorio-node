@@ -90,19 +90,21 @@ export class ProductionComponent implements OnInit, OnDestroy {
     this.clearEmptyRows(dataInPercentage, true);
     this.clearEmptyRows(dataOutPercentage, false);
 
-    this.dataSourceIn.setData(this.resourcesIn.sort((a, b) => a.percentages > b.percentages ? -1 : 1)
+    if (dataInPercentage && this.resourcesIn && dataInPercentage !== [] && this.resourcesIn !== []) this.dataSourceIn.setData(this.resourcesIn.sort((a, b) => a.percentages > b.percentages ? -1 : 1)
       .filter(value => value.amount > 0));
-    this.dataSourceOut.setData(this.resourcesOut.sort((a, b) => a.percentages > b.percentages ? -1 : 1)
+    if (dataOutPercentage && this.resourcesOut && dataOutPercentage !== [] && this.resourcesOut !== []) this.dataSourceOut.setData(this.resourcesOut.sort((a, b) => a.percentages > b.percentages ? -1 : 1)
       .filter(value => value.amount > 0));
   }
 
   mergeLists(resourceStatPercentage: ResourceDataPercentage[], isInput: boolean) {
+    if (resourceStatPercentage === undefined) return
     resourceStatPercentage.forEach(value => {
       this.refreshData(value, isInput);
     })
   }
 
   clearEmptyRows(resourceStatPercentage: ResourceDataPercentage[], isInput: boolean) {
+    if (resourceStatPercentage === undefined) return
     if (isInput) {
       this.resourcesIn.forEach((value, i) => {
         if (resourceStatPercentage.find(req => req.resource === value.resource) === undefined) {
@@ -148,6 +150,7 @@ export class ProductionComponent implements OnInit, OnDestroy {
   }
 
   makePercentage(dataRaw: ResourceInfo[]): ResourceDataPercentage[] {
+    if (dataRaw === undefined || !Array.isArray(dataRaw)) return []
     let result: ResourceDataPercentage[] = [];
     dataRaw = dataRaw.sort((a, b) => Number(a.amount) > Number(b.amount) ? -1 : 1);
     let maxAmount = Number(dataRaw[0].amount);

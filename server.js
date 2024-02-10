@@ -13,7 +13,7 @@ const rawParser = bodyParser.text({type: () => true})
 
 const clients = new Map();
 const options = {tcp: true, challenge: false};
-const factorio = new Rcon("5.83.173.187", 12350, "1337228", options);
+const factorio = new Rcon("0.0.0.0", 25566, "pass", options);
 var connected = false;
 
 wss.on('connection', (ws) => {
